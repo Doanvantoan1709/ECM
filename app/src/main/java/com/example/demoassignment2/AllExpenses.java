@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -29,6 +30,9 @@ public class AllExpenses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_expenses);
+
+
+
 
         DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
 
