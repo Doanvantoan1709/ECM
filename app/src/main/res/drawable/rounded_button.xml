@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#2976FF" /> <!-- Màu nền của Button -->
+    <corners android:radius="18dp" /> <!-- Bán kính bo góc -->
+    <stroke
+        android:width="2dp"
+        android:color="#2976FF" />
+</shape>
