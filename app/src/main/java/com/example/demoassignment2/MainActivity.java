@@ -89,26 +89,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.newExpense) {
-            Intent intent = new Intent(MainActivity.this,NewExpene.class);
-            startActivity(intent);
-
-        }
-        else if (item.getItemId()== R.id.listExpense) {
-            Intent intent = new Intent(getApplicationContext(), AllExpenses.class);
-            startActivity(intent);
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.menu_main,menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.newExpense) {
+//            Intent intent = new Intent(MainActivity.this,NewExpenseFragment.class);
+//            startActivity(intent);
+//
+//        }
+//        else if (item.getItemId()== R.id.listExpense) {
+//            Intent intent = new Intent(MainActivity.this, ListExpenseFragment.class);
+//            startActivity(intent);
+//        }
+//        return true;
+//    }
 
 
 
