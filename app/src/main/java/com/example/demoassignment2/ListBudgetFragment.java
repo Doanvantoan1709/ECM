@@ -1,5 +1,7 @@
 package com.example.demoassignment2;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
+
+import database.Budget;
+import database.DatabaseHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +71,70 @@ public class ListBudgetFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_budget, container, false);
+        // Inflate layout cho fragment
+        View view = inflater.inflate(R.layout.fragment_list_budget, container, false);
+
+        // Lấy tất cả các chi phí từ cơ sở dữ liệu
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        List<Budget> allExpense = dbHelper.getAllBudgets();
+
+        // Tạo ArrayAdapter với layout item_expense chứa TextView
+        ArrayAdapter<Budget> adapter = new ArrayAdapter<Budget>(
+                requireActivity(),
+                R.layout.item_budget,  // Layout cho mỗi item
+                allExpense
+        )
+        {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Inflate view từ layout item_expense
+                View view = super.getView(position, convertView, parent);
+
+                // Lấy đối tượng ExpenseEntity tại vị trí hiện tại
+                Budget expense = getItem(position);
+
+                // Tìm TextView trong layout item_expense
+                TextView tvExpense = view.findViewById(R.id.tv_budget);
+
+                // Đặt giá trị cho TextView
+                if (expense != null && tvExpense != null) {
+                    tvExpense.setText(expense.toString());  // Hiển thị thông tin chi phí
+                }
+
+                return view;
+            }
+        };
+
+        // Kết nối adapter với ListView
+        ListView listView = view.findViewById(R.id.listAllBudget);
+        listView.setAdapter(adapter);
+
+        // Đặt sự kiện click cho item trong ListView
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Budget entry = (Budget) parent.getItemAtPosition(position);
+                final String[] options = {"Delete", "Update"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setItems(options, (dialog, item) -> {
+                    if (options[item].equals("Delete")) {
+                        // Xóa chi phí khỏi ListView
+                        allExpense.remove(position);
+                        adapter.notifyDataSetChanged();
+
+                        // Xóa chi phí khỏi cơ sở dữ liệu
+                        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+                        dbHelper.deleteBudget(entry.getId());
+                    } else if (options[item].equals("Update")) {
+                        Intent itent=new Intent(getActivity(),BudgetUpdate.class);
+                        startActivity(itent);
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        return view;
     }
+
 }

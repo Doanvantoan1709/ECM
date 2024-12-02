@@ -8,6 +8,7 @@ public class ExpenseEntity implements Serializable {
     private String expenseDate;
     private String expenseType;
 
+
     private String amount;
 
     public String getAmount() {

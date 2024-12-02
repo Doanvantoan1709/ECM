@@ -16,16 +16,16 @@
             android:name=".DetailExpense"
             android:exported="false" />
         <activity
-            android:name=".ListBudget"
+            android:name=".BudgetUpdate"
             android:exported="false" />
         <activity
-            android:name=".NewBudget"
+            android:name=".ListBudgetFragment"
             android:exported="false" />
         <activity
-            android:name=".AllExpenses"
+            android:name=".NewBudgetFragment"
             android:exported="false" />
         <activity
-            android:name=".NewExpene"
+            android:name=".NewExpenseFragment"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

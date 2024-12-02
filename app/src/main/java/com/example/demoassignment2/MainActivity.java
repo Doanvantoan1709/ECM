@@ -27,8 +27,18 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(0);
 
+
+        Intent intent = getIntent();
+        //route tu activity BudgetUpdate ve main acitivy roi route sang fragment budgetlist
+          if (intent != null && intent.hasExtra("BudgetList")) {
+            String fragmentToShow = intent.getStringExtra("BudgetList");
+            if ("BudgetList".equals(fragmentToShow)) {
+                viewPager.setCurrentItem(4); // 4 là chỉ số của ListFragment
+                bottomNavigationView.getMenu().findItem(R.id.listBudget).setChecked(true);
+            }
+         }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -88,27 +98,6 @@ public class MainActivity extends AppCompatActivity {
       });
 
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.menu_main,menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if (item.getItemId() == R.id.newExpense) {
-//            Intent intent = new Intent(MainActivity.this,NewExpenseFragment.class);
-//            startActivity(intent);
-//
-//        }
-//        else if (item.getItemId()== R.id.listExpense) {
-//            Intent intent = new Intent(MainActivity.this, ListExpenseFragment.class);
-//            startActivity(intent);
-//        }
-//        return true;
-//    }
 
 
 

@@ -209,6 +209,4 @@ public class NewExpenseFragment extends Fragment {
     }
 
 
-
-
 }
