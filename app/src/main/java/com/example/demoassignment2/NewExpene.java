@@ -66,8 +66,8 @@ public class NewExpene extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText expenseNameControl = findViewById(R.id.editTextText);
-                String expenseName = expenseNameControl.getText().toString();
+//                EditText expenseNameControl = findViewById(R.id.editTextText);
+//                String expenseName = expenseNameControl.getText().toString();
 
                 Spinner expenseTypeControl = findViewById(R.id.spinner);
                 String expenseType  = expenseTypeControl.getSelectedItem().toString();
@@ -79,7 +79,7 @@ public class NewExpene extends AppCompatActivity {
                 String expenseDate = expenseDateControl.getText().toString();
 
                 ExpenseEntity expense = new ExpenseEntity();
-                expense.setExpenseName(expenseName);
+//                expense.setExpenseName(expenseName);
                 expense.setExpenseType(expenseType);
                 expense.setAmount(expenseAmount);
                 expense.setExpenseDate(expenseDate);
