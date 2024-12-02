@@ -1,8 +1,10 @@
 package database;
 
-public class ExpenseEntity {
+import java.io.Serializable;
+
+public class ExpenseEntity implements Serializable {
     private int id;
-    private String expenseName;
+    private String expenseNote;
     private String expenseDate;
     private String expenseType;
 
@@ -17,16 +19,15 @@ public class ExpenseEntity {
         this.amount = amount;
     }
 
-    public ExpenseEntity(int id, String expenseName, String expenseDate, String expenseType, String amount) {
+    public ExpenseEntity(int id, String expenseNote, String expenseDate, String expenseType, String amount) {
         this.id = id;
-        this.expenseName = expenseName;
+        this.expenseNote = expenseNote;
         this.expenseDate = expenseDate;
         this.expenseType = expenseType;
         this.amount = amount;
     }
 
-    public ExpenseEntity() {
-    }
+    public ExpenseEntity() {}
 
     public int getId() {
         return id;
@@ -36,13 +37,11 @@ public class ExpenseEntity {
         this.id = id;
     }
 
-    public String getExpenseName() {
-        return expenseName;
+    public String getExpenseNote() {
+        return expenseNote;
     }
 
-    public void setExpenseName(String expenseName) {
-        this.expenseName = expenseName;
-    }
+    public void setExpenseNote(String expenseNote) {this.expenseNote = expenseNote;}
 
     public String getExpenseDate() {
         return expenseDate;
@@ -59,8 +58,8 @@ public class ExpenseEntity {
     public void setExpenseType(String expenseType) {
         this.expenseType = expenseType;
     }
-    public String toString() {
-        return  expenseName + "\n" + amount + "\n" +expenseDate;
 
+    public String toString() {
+        return "Group: " +  expenseType + "\n" + "Note: " + expenseNote + "\n" + "Amount: " + amount + " VNĐ" + "\n" + "Calendar: " + expenseDate;
     }
 }
