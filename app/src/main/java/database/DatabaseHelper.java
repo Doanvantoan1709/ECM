@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "ExpenseDB.db";
 
     /* Inner class that defines the table contents */
@@ -27,16 +27,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     ///budget
     public static class BudgetEntry implements BaseColumns {
         public static final String TABLE_NAME = "budget";
-        public static final String COLUMN_NAME_BUDGETTYPE = "budgetType";
+
         public static final String COLUMN_NAME_EXPENSEDATE = "expenseDate";
         public static final String COLUMN_NAME_EXPENSETYPE = "expenseType";
+        public static final String COLUMN_NAME_AMOUNT = "amount";
     }
     private static final String SQL_CREATE_BUDGET_ENTRIES =
             "CREATE TABLE " + BudgetEntry.TABLE_NAME + " (" +
                     BudgetEntry._ID + " INTEGER PRIMARY KEY," +
-                    BudgetEntry.COLUMN_NAME_BUDGETTYPE + " TEXT," +
+
                     BudgetEntry.COLUMN_NAME_EXPENSEDATE + " TEXT," +
-                    BudgetEntry.COLUMN_NAME_EXPENSETYPE + " TEXT)";
+                    BudgetEntry.COLUMN_NAME_EXPENSETYPE + " TEXT," +
+                    BudgetEntry.COLUMN_NAME_AMOUNT + " INTEGER)";
 
     private static final String SQL_DELETE_BUDGET_ENTRIES =
             "DROP TABLE IF EXISTS " + BudgetEntry.TABLE_NAME;
@@ -130,39 +132,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //ínert budget
     public long insertBudget(Budget budget) {
         ContentValues values = new ContentValues();
-        values.put(BudgetEntry.COLUMN_NAME_BUDGETTYPE, budget.getBudgetType());
         values.put(BudgetEntry.COLUMN_NAME_EXPENSEDATE, budget.getExpenseDate());
         values.put(BudgetEntry.COLUMN_NAME_EXPENSETYPE, budget.getExpenseType());
-
+        values.put(BudgetEntry.COLUMN_NAME_AMOUNT, budget.getAmount());
         return database.insertOrThrow(BudgetEntry.TABLE_NAME, null, values);
     }
 
     //get all Budget
+    // Get all budgets
     public List<Budget> getAllBudgets() {
         Cursor results = database.query(BudgetEntry.TABLE_NAME,
-                new String[]{BudgetEntry._ID, BudgetEntry.COLUMN_NAME_BUDGETTYPE, BudgetEntry.COLUMN_NAME_EXPENSEDATE, BudgetEntry.COLUMN_NAME_EXPENSETYPE},
+                new String[]{
+                        BudgetEntry._ID,
+                        BudgetEntry.COLUMN_NAME_EXPENSEDATE,
+                        BudgetEntry.COLUMN_NAME_EXPENSETYPE,
+                        BudgetEntry.COLUMN_NAME_AMOUNT // Thêm cột amount
+                },
                 null, null, null, null, BudgetEntry.COLUMN_NAME_EXPENSEDATE);
 
         List<Budget> budgets = new ArrayList<>();
         results.moveToFirst();
         while (!results.isAfterLast()) {
             int id = results.getInt(0);
-            String budgetType = results.getString(1);
-            String expenseDate = results.getString(2);
-            String expenseType = results.getString(3);
+            String expenseDate = results.getString(1);
+            String expenseType = results.getString(2);
+            int amount = results.getInt(3); // Đọc giá trị amount
 
             Budget budget = new Budget();
             budget.setId(id);
-            budget.setBudgetType(budgetType);
             budget.setExpenseDate(expenseDate);
             budget.setExpenseType(expenseType);
-            budgets.add(budget);
+            budget.setAmount(amount); // Gán amount vào đối tượng
 
+            budgets.add(budget);
             results.moveToNext();
         }
 
         return budgets;
     }
+
 
     //delete budget
     public void deleteBudget(int id) {
@@ -174,9 +182,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //update budget
     public int updateBudget(Budget budget) {
         ContentValues values = new ContentValues();
-        values.put(BudgetEntry.COLUMN_NAME_BUDGETTYPE, budget.getBudgetType());
         values.put(BudgetEntry.COLUMN_NAME_EXPENSEDATE, budget.getExpenseDate());
         values.put(BudgetEntry.COLUMN_NAME_EXPENSETYPE, budget.getExpenseType());
+        values.put(BudgetEntry.COLUMN_NAME_AMOUNT, budget.getAmount());
 
         return database.update(BudgetEntry.TABLE_NAME, values, BudgetEntry._ID + "=?",
                 new String[]{String.valueOf(budget.getId())});

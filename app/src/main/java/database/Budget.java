@@ -3,21 +3,31 @@ package database;
 public class Budget {
 
     private  int id;
-    private String budgetType;
+
     private String expenseDate;
     private String expenseType;
+    private int amount;
 
 
-    public Budget(String budgetType, String expenseDate, String expenseType, int id) {
-        this.budgetType = budgetType;
+    public Budget( String expenseDate, String expenseType, int id,int amount) {
+
         this.expenseDate = expenseDate;
         this.expenseType = expenseType;
         this.id = id;
+        this.amount=amount;
+
     }
 
     public Budget() {
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
     public int getId() {
         return id;
@@ -27,13 +37,9 @@ public class Budget {
         this.id = id;
     }
 
-    public String getBudgetType() {
-        return budgetType;
-    }
 
-    public void setBudgetType(String budgetType) {
-        this.budgetType = budgetType;
-    }
+
+
 
     public String getExpenseType() {
         return expenseType;
@@ -53,11 +59,11 @@ public class Budget {
 
     @Override
     public String toString() {
-        return "Budget{" +
-                "id=" + id +
-                ", budgetType='" + budgetType + '\'' +
-                ", expenseDate='" + expenseDate + '\'' +
-                ", expenseType='" + expenseType + '\'' +
-                '}';
+        return
+
+                "Date : "+     expenseDate  +"\n"
+           +"Group : "  + expenseType +"\n"+
+                "Amount : "+ amount
+                ;
     }
 }
