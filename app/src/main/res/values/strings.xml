@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">DemoAssignment2</string>
     <string-array name="expenseTypes">
-        <item>Chon kieu Expense</item>
-        <item>Tourisim</item>
+        <item>Tourism</item>
         <item>Study</item>
         <item>Shopping</item>
+        <item>Eat</item>
+        <item>Health</item>
+        <item>Other</item>
     </string-array>
 </resources>
