@@ -24,6 +24,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_TYPE = "type";
     }
 
+    ///budget
+    public static class BudgetEntry implements BaseColumns {
+        public static final String TABLE_NAME = "budget";
+        public static final String COLUMN_NAME_BUDGETTYPE = "budgetType";
+        public static final String COLUMN_NAME_EXPENSEDATE = "expenseDate";
+        public static final String COLUMN_NAME_EXPENSETYPE = "expenseType";
+    }
+    private static final String SQL_CREATE_BUDGET_ENTRIES =
+            "CREATE TABLE " + BudgetEntry.TABLE_NAME + " (" +
+                    BudgetEntry._ID + " INTEGER PRIMARY KEY," +
+                    BudgetEntry.COLUMN_NAME_BUDGETTYPE + " TEXT," +
+                    BudgetEntry.COLUMN_NAME_EXPENSEDATE + " TEXT," +
+                    BudgetEntry.COLUMN_NAME_EXPENSETYPE + " TEXT)";
+
+    private static final String SQL_DELETE_BUDGET_ENTRIES =
+            "DROP TABLE IF EXISTS " + BudgetEntry.TABLE_NAME;
+    //end
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES); // Tạo bảng expense
+        db.execSQL(SQL_CREATE_BUDGET_ENTRIES); // Tạo bảng budget
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(SQL_DELETE_ENTRIES); // Xóa bảng expense
+        db.execSQL(SQL_DELETE_BUDGET_ENTRIES); // Xóa bảng budget
+        onCreate(db); // Tạo lại các bảng
+    }
+
+
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ExpenseEntry.TABLE_NAME + " (" +
                     ExpenseEntry._ID + " INTEGER PRIMARY KEY," +
@@ -41,20 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database = getWritableDatabase();
 
     }
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
-    }
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);
-    }
-    public void deleteExpense(int id){
-        database.delete(ExpenseEntry.TABLE_NAME,ExpenseEntry._ID + "=?",
-                new String[]{String.valueOf(id)});
-        database.close();
-    }
+
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
@@ -70,6 +89,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Insert the new row, returning the primary key value of the new row
         return database.insertOrThrow(ExpenseEntry.TABLE_NAME, null, values);
+    }
+
+    //delte expense
+
+    //delete budget
+    public void deleteExpense(int id) {
+        database.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?",
+                new String[]{String.valueOf(id)});
     }
 
     public List<ExpenseEntity> getAllExpenses() {
@@ -97,4 +124,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return expenses;
 
     }
+
+
+
+    //ínert budget
+    public long insertBudget(Budget budget) {
+        ContentValues values = new ContentValues();
+        values.put(BudgetEntry.COLUMN_NAME_BUDGETTYPE, budget.getBudgetType());
+        values.put(BudgetEntry.COLUMN_NAME_EXPENSEDATE, budget.getExpenseDate());
+        values.put(BudgetEntry.COLUMN_NAME_EXPENSETYPE, budget.getExpenseType());
+
+        return database.insertOrThrow(BudgetEntry.TABLE_NAME, null, values);
+    }
+
+    //get all Budget
+    public List<Budget> getAllBudgets() {
+        Cursor results = database.query(BudgetEntry.TABLE_NAME,
+                new String[]{BudgetEntry._ID, BudgetEntry.COLUMN_NAME_BUDGETTYPE, BudgetEntry.COLUMN_NAME_EXPENSEDATE, BudgetEntry.COLUMN_NAME_EXPENSETYPE},
+                null, null, null, null, BudgetEntry.COLUMN_NAME_EXPENSEDATE);
+
+        List<Budget> budgets = new ArrayList<>();
+        results.moveToFirst();
+        while (!results.isAfterLast()) {
+            int id = results.getInt(0);
+            String budgetType = results.getString(1);
+            String expenseDate = results.getString(2);
+            String expenseType = results.getString(3);
+
+            Budget budget = new Budget();
+            budget.setId(id);
+            budget.setBudgetType(budgetType);
+            budget.setExpenseDate(expenseDate);
+            budget.setExpenseType(expenseType);
+            budgets.add(budget);
+
+            results.moveToNext();
+        }
+
+        return budgets;
+    }
+
+    //delete budget
+    public void deleteBudget(int id) {
+        database.delete(BudgetEntry.TABLE_NAME, BudgetEntry._ID + "=?",
+                new String[]{String.valueOf(id)});
+    }
+
+
+    //update budget
+    public int updateBudget(Budget budget) {
+        ContentValues values = new ContentValues();
+        values.put(BudgetEntry.COLUMN_NAME_BUDGETTYPE, budget.getBudgetType());
+        values.put(BudgetEntry.COLUMN_NAME_EXPENSEDATE, budget.getExpenseDate());
+        values.put(BudgetEntry.COLUMN_NAME_EXPENSETYPE, budget.getExpenseType());
+
+        return database.update(BudgetEntry.TABLE_NAME, values, BudgetEntry._ID + "=?",
+                new String[]{String.valueOf(budget.getId())});
+    }
+
+
 }

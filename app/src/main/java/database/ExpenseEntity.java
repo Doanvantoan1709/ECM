@@ -6,6 +6,7 @@ public class ExpenseEntity {
     private String expenseDate;
     private String expenseType;
 
+
     private String amount;
 
     public String getAmount() {
