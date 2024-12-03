@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.DialogFragment;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +21,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import java.util.Calendar;
+
 import database.DatabaseHelper;
 import database.ExpenseEntity;
 
@@ -38,6 +42,9 @@ public class NewExpenseFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private EditText expenseAmountControl, expenseDateControl, expenseNoteControl;
+
+    private Spinner expenseTypeControl;
 
     public NewExpenseFragment() {
         // Required empty public constructor
@@ -75,7 +82,10 @@ public class NewExpenseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_expense, container, false);
-
+        expenseTypeControl = view.findViewById(R.id.spinner);
+        expenseDateControl = view.findViewById(R.id.editTextDate);
+        expenseAmountControl = view.findViewById(R.id.editTextNumberDecimal);
+        expenseNoteControl=view.findViewById(R.id.editTextNote);
         EditText expenseDate = view.findViewById(R.id.editTextDate);
         expenseDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,20 +97,20 @@ public class NewExpenseFragment extends Fragment {
 
         });
 
-        Button btnreset=view.findViewById(R.id.button2);
+        Button btnreset = view.findViewById(R.id.button2);
         btnreset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Reset Spinner (Đặt về giá trị mặc định)
-                Spinner expenseTypeControl = view.findViewById(R.id.spinner);
+                expenseTypeControl = view.findViewById(R.id.spinner);
                 expenseTypeControl.setSelection(0); // Đặt lại Spinner về giá trị đầu tiên (mặc định)
 
                 // Reset EditText cho số tiền
-                EditText expenseAmountControl = view.findViewById(R.id.editTextNumberDecimal);
+                expenseAmountControl = view.findViewById(R.id.editTextNumberDecimal);
                 expenseAmountControl.setText(""); // Xóa giá trị trong EditText
 
                 // Reset EditText cho ngày
-                EditText expenseDateControl = view.findViewById(R.id.editTextDate);
+                expenseDateControl = view.findViewById(R.id.editTextDate);
                 expenseDateControl.setText(""); // Xóa giá trị trong EditText
 
                 EditText expenseNoteControl = view.findViewById(R.id.editTextNote);
@@ -218,4 +228,21 @@ public class NewExpenseFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        expenseTypeControl.setSelection(0); // Đặt lại Spinner về giá trị đầu tiên (mặc định)
+
+        // Reset EditText cho số tiền
+
+        expenseAmountControl.setText(""); // Xóa giá trị trong EditText
+
+        // Reset EditText cho ngày
+
+        expenseDateControl.setText(""); // Xóa giá trị trong EditText
+
+        expenseNoteControl.setText("");
+
+    }
 }
