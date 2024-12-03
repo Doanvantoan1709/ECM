@@ -40,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
             }
          }
 
+
+        //route tu activity DetailExpense ve main acitivy roi route sang fragment expenselist
+        if (intent != null && intent.hasExtra("ExpenseList")) {
+            String fragmentToShow = intent.getStringExtra("ExpenseList");
+            if ("ExpenseList".equals(fragmentToShow)) {
+                viewPager.setCurrentItem(2); // 4 là chỉ số của ListFragment
+                bottomNavigationView.getMenu().findItem(R.id.listExpense).setChecked(true);
+            }
+        }
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

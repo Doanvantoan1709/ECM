@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".NewBudgetFragment"
     android:orientation="vertical"
-    android:background="@drawable/bg_app">
+
+   >
 
     <TextView
         android:id="@+id/textView"

@@ -2,6 +2,7 @@ package com.example.demoassignment2;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -49,7 +51,7 @@ public class NewBudgetFragment extends Fragment {
         }
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            editText.setText(dayOfMonth + "/" + month + "/" + year);
+            editText.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
         }
     }
 
@@ -105,7 +107,7 @@ public class NewBudgetFragment extends Fragment {
         budgetdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewExpene.DatePickerFragment datePicker = new NewExpene.DatePickerFragment();
+                NewBudgetFragment.DatePickerFragment datePicker = new NewBudgetFragment.DatePickerFragment();
                 datePicker.editText = budgetdate;
                 datePicker.show(requireActivity().getSupportFragmentManager(), "datePicker");
             }
@@ -116,6 +118,14 @@ public class NewBudgetFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Ẩn bàn phím
+                View currentView = requireActivity().getCurrentFocus();
+                if (currentView != null) {
+                    InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
+                }
+
                 // Lấy giá trị từ các điều khiển
                 Spinner expenseTypeControl = view.findViewById(R.id.spinner);
                 String expenseType = expenseTypeControl.getSelectedItem().toString();
@@ -132,24 +142,24 @@ public class NewBudgetFragment extends Fragment {
                 // Kiểm tra Spinner (không chọn giá trị mặc định)
                 if (expenseType.equals("Chọn loại chi phí")) { // Thay "Chọn loại chi phí" bằng giá trị mặc định của bạn
                     isValid = false;
-                    Toast.makeText(getContext(), "Vui lòng chọn loại chi phí.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please enter choose Budget Type.", Toast.LENGTH_SHORT).show();
                 }
 
                 // Kiểm tra số tiền
                 int amount = 0;
                 if (expenseAmount.isEmpty()) {
                     isValid = false;
-                    expenseAmountControl.setError("Vui lòng nhập số tiền.");
+                    expenseAmountControl.setError("Please Enter amount .");
                 } else {
                     try {
                         amount = Integer.parseInt(expenseAmount);
                         if (amount <= 0) {
                             isValid = false;
-                            expenseAmountControl.setError("Số tiền phải lớn hơn 0.");
+                            expenseAmountControl.setError("Please Enter ammount > 0");
                         }
                     } catch (NumberFormatException e) {
                         isValid = false;
-                        expenseAmountControl.setError("Vui lòng nhập một số hợp lệ.");
+                        expenseAmountControl.setError("Please Enter number");
                     }
                 }
 
@@ -172,7 +182,7 @@ public class NewBudgetFragment extends Fragment {
                     long id = dbHelper.insertBudget(budget);
 
                     // Thông báo kết quả
-                    Toast.makeText(getActivity(), "Id: " + id + " đã được thêm!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Add budget Successfull! ", Toast.LENGTH_LONG).show();
 
                     // Reset form sau khi lưu
                     expenseAmountControl.setText("");

@@ -1,6 +1,8 @@
 package database;
 
-public class Budget {
+import java.io.Serializable;
+
+public class Budget  implements Serializable {
 
     private  int id;
 

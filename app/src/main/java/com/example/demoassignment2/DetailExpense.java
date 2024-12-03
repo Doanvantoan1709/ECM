@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -158,6 +159,21 @@ public class DetailExpense extends AppCompatActivity {
 //                databaseHelper.updateExpense(expense);
                 updateExpense();
                 finish(); // Close the activity
+            }
+        });
+
+
+        LinearLayout back = findViewById(R.id.backIcon);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(DetailExpense.this, MainActivity.class);
+                intent.putExtra("ExpenseList", "ExpenseList"); // Truyền thông tin về fragment
+                startActivity(intent);
+                finish();
+
             }
         });
 

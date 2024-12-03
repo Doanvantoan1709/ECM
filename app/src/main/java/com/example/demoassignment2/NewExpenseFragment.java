@@ -2,6 +2,7 @@ package com.example.demoassignment2;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -110,6 +112,13 @@ public class NewExpenseFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Ẩn bàn phím
+                View currentView = requireActivity().getCurrentFocus();
+                if (currentView != null) {
+                    InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
+                }
                 EditText expenseNoteControl = view.findViewById(R.id.editTextNote);
                 String expenseNote = expenseNoteControl.getText().toString().trim();
 
@@ -181,7 +190,7 @@ public class NewExpenseFragment extends Fragment {
 
                 // Reset EditText cho ghi chú
                 expenseNoteControl.setText("");
-                Toast.makeText(getContext(), "Id: " + id + ", Inserted", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Add Expense successfull !", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -204,7 +213,7 @@ public class NewExpenseFragment extends Fragment {
 
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            editText.setText(dayOfMonth + "/" + month + "/" + year);
+            editText.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
         }
     }
 
