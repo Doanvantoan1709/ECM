@@ -63,9 +63,9 @@ public class NewBudgetFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private    Spinner expenseTypeControl;
     private Button btnSave;
-
+    private  EditText expenseAmountControl,expenseDateControl;
     public NewBudgetFragment() {
         // Required empty public constructor
     }
@@ -102,7 +102,9 @@ public class NewBudgetFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_new_budget, container, false);
-
+         expenseTypeControl = view.findViewById(R.id.spinner);
+         expenseDateControl = view.findViewById(R.id.editTextDate);
+         expenseAmountControl = view.findViewById(R.id.editTextNumberDecimal);
         EditText budgetdate = view.findViewById(R.id.editTextDate);
         budgetdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,4 +216,19 @@ public class NewBudgetFragment extends Fragment {
         return  view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reset Spinner (Đặt về giá trị mặc định)
+
+        expenseTypeControl.setSelection(0); // Đặt lại Spinner về giá trị đầu tiên (mặc định)
+
+        // Reset EditText cho số tiền
+
+        expenseAmountControl.setText(""); // Xóa giá trị trong EditText
+
+        // Reset EditText cho ngày
+
+        expenseDateControl.setText(""); // Xóa giá trị trong EditText
+    }
 }
