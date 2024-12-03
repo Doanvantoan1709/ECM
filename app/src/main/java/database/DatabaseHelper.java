@@ -183,17 +183,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return budgets;
     }
-
     // Update a budget
-    public void updateBudget(Budget budget) {
+    public int updateBudget(Budget budget) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(BudgetEntry.COLUMN_NAME_EXPENSEDATE, budget.getExpenseDate());
         values.put(BudgetEntry.COLUMN_NAME_EXPENSETYPE, budget.getExpenseType());
         values.put(BudgetEntry.COLUMN_NAME_AMOUNT, budget.getAmount());
-        db.update(BudgetEntry.TABLE_NAME, values,
-                BudgetEntry._ID + "=?", new String[]{String.valueOf(budget.getId())});
-        db.close();
+
+        // Thực hiện cập nhật và nhận số dòng bị ảnh hưởng
+        int rowsAffected = db.update(
+                BudgetEntry.TABLE_NAME,
+                values,
+                BudgetEntry._ID + "=?",
+                new String[]{String.valueOf(budget.getId())}
+        );
+        db.close(); // Đóng kết nối cơ sở dữ liệu
+        return rowsAffected; // Trả về số dòng bị ảnh hưởng
     }
 
     // Delete a budget

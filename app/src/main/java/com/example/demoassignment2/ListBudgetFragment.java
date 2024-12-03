@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,6 +128,10 @@ public class ListBudgetFragment extends Fragment {
                         dbHelper.deleteBudget(entry.getId());
                     } else if (options[item].equals("Update")) {
                         Intent itent=new Intent(getActivity(),BudgetUpdate.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("budget", entry); // Sử dụng putSerializable để truyền đối tượng
+                        itent.putExtras(bundle); // Đưa Bundle vào Intent
                         startActivity(itent);
                     }
                 });
@@ -135,6 +140,47 @@ public class ListBudgetFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Lấy danh sách cập nhật từ cơ sở dữ liệu
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        List<Budget> allExpense = dbHelper.getAllBudgets();
+
+        // Tìm ListView trong layout
+        ListView listView = requireView().findViewById(R.id.listAllBudget);
+
+        // Lấy adapter hiện tại từ ListView (nếu tồn tại)
+        ArrayAdapter<Budget> adapter = (ArrayAdapter<Budget>) listView.getAdapter();
+
+        if (adapter != null) {
+            // Cập nhật dữ liệu và thông báo thay đổi
+            adapter.clear();
+            adapter.addAll(allExpense);
+            adapter.notifyDataSetChanged();
+        } else {
+            // Nếu chưa có adapter, tạo và gán mới
+            adapter = new ArrayAdapter<Budget>(
+                    requireActivity(),
+                    R.layout.item_budget, // Layout cho mỗi item
+                    allExpense
+            ) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    Budget expense = getItem(position);
+                    TextView tvExpense = view.findViewById(R.id.tv_budget);
+                    if (expense != null && tvExpense != null) {
+                        tvExpense.setText(expense.toString());
+                    }
+                    return view;
+                }
+            };
+            listView.setAdapter(adapter);
+        }
     }
 
 }
